@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>El Rinconcito de los Postres</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* === Colores proporcionados === */
+    :root{
+      --fondo: #FFF8E7;        /* fondo principal */
+      --rosa-pastel: #F9C5D5; /* secundario */
+      --marron: #5C40333;     /* acento marrón (usar sin opacidad extra) */
+      --marron-true: #5C4033;
+      --gris-oscuro: #333333; /* texto principal */
+      --rosa-fuerte: #E76F93; /* botones/enlaces */
+      --radio: 12px;
+    }
+
+    /* Reset y base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--fondo);
+      color:var(--gris-oscuro);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+    }
+
+    header{
+      background:transparent;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      position:sticky;
+      top:0;
+      z-index:30;
+      backdrop-filter: blur(4px);
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logo .cup{
+      width:56px;height:56px;border-radius:50%;
+      background:var(--rosa-pastel);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+      border:2px solid rgba(92,64,51,0.06);
+    }
+    .logo h1{
+      margin:0;
+      font-family:'Playfair Display', serif;
+      font-size:20px;
+      color:var(--marron-true);
+      line-height:1;
+    }
+    .logo p{margin:0;font-size:12px;color:var(--marron-true);opacity:0.9}
+
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{
+      text-decoration:none;color:var(--gris-oscuro);font-weight:600;font-size:14px;
+      padding:8px 10px;border-radius:10px;
+    }
+    nav a:hover{background:rgba(0,0,0,0.03)}
+
+    /* Mobile menu button */
+    .menu-toggle{display:none}
+
+    main{
+      max-width:1100px;
+      margin:32px auto;
+      padding: 0 20px 60px;
+    }
+
+    /* === HERO / INICIO === */
+    .hero{
+      background: linear-gradient(180deg, rgba(249,197,213,0.10), rgba(255,248,231,0.6));
+      border-radius:18px;
+      padding:28px;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:24px;
+      align-items:center;
+      box-shadow: 0 6px 20px rgba(92,64,51,0.06);
+    }
+
+    .hero h2{
+      font-family:'Playfair Display', serif;
+      font-size:34px;
+      margin:0 0 14px 0;
+      color:var(--marron-true);
+    }
+    .hero p.lead{
+      margin:0 0 18px 0;
+      color:var(--gris-oscuro);
+      font-size:16px;
+      max-width:560px;
+    }
+    .btn-primary{
+      background:var(--rosa-fuerte);
+      color:white;
+      padding:12px 18px;
+      border-radius:10px;
+      display:inline-block;
+      text-decoration:none;
+      font-weight:600;
+    }
+    .hero .gallery{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      align-items:center;
+      justify-items:center;
+    }
+    .hero .main-img{
+      width:100%;
+      border-radius:12px;
+      background:#fff;
+      padding:8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+    .hero .thumbs{display:flex;gap:8px;margin-top:8px}
+    .hero img{width:100%;height:auto;display:block;border-radius:10px;object-fit:cover}
+
+    /* === SECCIONES GENERALES === */
+    section{margin-top:34px;padding:22px;border-radius:14px;background:transparent}
+    .card{
+      background:rgba(255,255,255,0.6);
+      border-radius:14px;padding:20px;
+      box-shadow: 0 6px 18px rgba(92,64,51,0.04);
+    }
+
+    /* NOSOTROS */
+    .about{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:18px;align-items:center;
+    }
+    .about h3{
+      margin-top:0;
+      font-family:'Playfair Display', serif;
+      color:var(--marron-true);
+      font-size:22px;
+    }
+    .team-grid{display:flex;flex-direction:column;gap:10px}
+    .team-member{display:flex;gap:12px;align-items:center}
+    .team-member img{width:64px;height:64px;border-radius:10px;object-fit:cover}
+
+    /* MENU / PRODUCTOS */
+    .menu-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+      margin-top:12px;
+    }
+    .product{
+      background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.95));
+      border-radius:12px;padding:12px;
+      display:flex;flex-direction:column;gap:8px;
+      align-items:flex-start;
+    }
+    .product img{width:100%;border-radius:10px;object-fit:cover;height:150px}
+    .product h4{margin:0;font-size:16px;color:var(--marron-true)}
+    .product p{margin:0;font-size:13px;color:var(--gris-oscuro);opacity:0.9}
+    .price{margin-top:auto;font-weight:700;color:var(--marron-true)}
+
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .filter-btn{
+      background:transparent;border:1px solid rgba(51,51,51,0.06);
+      padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;
+    }
+    .filter-btn.active{background:var(--rosa-pastel);border-color:var(--rosa-pastel);color:var(--marron-true)}
+
+    /* PROMOCIONES */
+    .promos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .promo{padding:14px;border-radius:12px;background:linear-gradient(180deg,var(--rosa-pastel),#ffe8ee);border:1px solid rgba(231,111,147,0.12)}
+    .promo h4{margin:0 0 6px 0;color:var(--marron-true)}
+    .promo p{margin:0;color:var(--gris-oscuro)}
+
+    /* CONTACTO */
+    .contact-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    form input, form textarea{
+      width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);
+      margin-bottom:10px;font-size:14px;
+    }
+    .btn-send{background:var(--marron-true);color:white;padding:12px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+    .contact-info{font-size:14px;color:var(--gris-oscuro);display:flex;flex-direction:column;gap:8px}
+    .map{border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,0.06)}
+
+    /* FOOTER */
+    footer{
+      margin-top:28px;padding:18px 20px;border-radius:10px;background:transparent;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:1100px;margin-left:auto;margin-right:auto;
+    }
+    .socials a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--gris-oscuro);padding:8px;border-radius:10px}
+    .socials a svg{width:18px;height:18px;display:block}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns: 1fr}
+      .about{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      header{padding:12px}
+    }
+
+    @media (max-width:640px){
+      nav{display:none}
+      .menu-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;background:transparent;border-radius:10px}
+      .logo h1{font-size:18px}
+      .hero h2{font-size:26px}
+      .hero .gallery{grid-template-columns:1fr}
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo" aria-label="Logotipo El Rinconcito de los Postres">
+      <div class="cup" aria-hidden="true">
+        <!-- cupcake svg icon -->
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 10c0-1.657 1.343-3 3-3h6c1.657 0 3 1.343 3 3v1H6v-1z" fill="#F9C5D5"/>
+          <path d="M17 11H7l1.2 6.4A2 2 0 0 0 10 19h4a2 2 0 0 0 1.8-1.6L17 11z" fill="#5C4033"/>
+        </svg>
+      </div>
+      <div>
+        <h1>El Rinconcito</h1>
+        <p>de los Postres</p>
+      </div>
+    </div>
+
+    <nav role="navigation" aria-label="Menú principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#menu">Menú</a>
+      <a href="#promociones">Promociones</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" id="menuBtn">
+      ☰
+    </button>
+  </header>
+
+  <!-- mobile menu -->
+  <div id="mobile-menu" style="display:none;padding:10px 22px;">
+    <a href="#inicio" style="display:block;padding:8px 0">Inicio</a>
+    <a href="#nosotros" style="display:block;padding:8px 0">Nosotros</a>
+    <a href="#menu" style="display:block;padding:8px 0">Menú</a>
+    <a href="#promociones" style="display:block;padding:8px 0">Promociones</a>
+    <a href="#contacto" style="display:block;padding:8px 0">Contacto</a>
+  </div>
+
+  <main>
+
+    <!-- INICIO -->
+    <section id="inicio" class="card hero" aria-labelledby="titulo-inicio">
+      <div>
+        <h2 id="titulo-inicio">Bienvenido a El Rinconcito de los Postres</h2>
+        <p class="lead">Un dulce momento en cada bocado. Ven a probar nuestras tartas, brownies, cheesecakes y cupcakes hechos con cariño y recetas caseras.</p>
+        <a class="btn-primary" href="#menu">Ver menú</a>
+
+        <div style="margin-top:18px;display:flex;gap:10px;align-items:center">
+          <div style="display:flex;gap:8px;align-items:center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:0.9"><circle cx="12" cy="12" r="10" stroke="#5C4033" stroke-width="1.2"/></svg>
+            <div style="font-size:13px;color:var(--marron-true)"><strong>Dirección:</strong> Calle Dulce 123</div>
+          </div>
+          <div style="margin-left:12px;font-size:13px;color:var(--gris-oscuro)">
+            <strong>Horario:</strong> Lun-Dom 9:00 - 20:00
+          </div>
+        </div>
+
+      </div>
+
+      <div class="gallery" aria-hidden="false">
+        <div class="main-img">
+          <img src="images/logo.jpeg" alt="Plato con selección de postres. Sustituye por tu imagen principal">
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <img src="images/cupcakesdevainilla.jpeg" alt="Cupcake de vainilla">
+          <img src="images/rebanadadechocolate.jpeg" alt="Brownie de chocolate">
+        </div>
+      </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section id="nosotros" class="card" aria-labelledby="titulo-nosotros">
+      <div class="about">
+        <div>
+          <h3 id="titulo-nosotros">Nosotros</h3>
+          <p><strong>El Rinconcito de los Postres</strong> nació como un emprendimiento familiar con la idea de compartir recetas caseras y momentos dulces. Nuestra misión es ofrecer postres elaborados con ingredientes de calidad y un servicio cercano. Valoramos el cariño en cada preparación y la cercanía con nuestros clientes.</p>
+
+          <h4 style="margin-top:14px;color:var(--marron-true)">Misión, Visión y Valores</h4>
+          <ul>
+            <li><strong>Misión:</strong> Endulzar el día con postres caseros y atención acogedora.</li>
+            <li><strong>Visión:</strong> Ser el rinconcito favorito de postres en la ciudad.</li>
+            <li><strong>Valores:</strong> Calidad, amor por la cocina, sostenibilidad y cercanía.</li>
+          </ul>
+        </div>
+
+        <aside>
+          <div class="team-grid">
+            <div class="team-member">
+              <img src="images/team1.png" alt="Foto equipo 1">
+              <div><strong>Sofi</strong><div style="font-size:13px;color:var(--gris-oscuro)">Pastelera principal</div></div>
+            </div>
+            <div class="team-member">
+              <img src="images/team2.png" alt="Foto equipo 2">
+              <div><strong>Christian</strong><div style="font-size:13px;color:var(--gris-oscuro)">Atención al cliente</div></div>
+            </div>
+            <div class="team-member">
+              <img src="images/ambiente.png" alt="Ambiente del local">
+              <div style="font-size:13px;color:var(--gris-oscuro)">Un ambiente cálido y acogedor</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- MENÚ / PRODUCTOS -->
+    <section id="menu" class="card" aria-labelledby="titulo-menu">
+      <h3 id="titulo-menu" style="font-family:'Playfair Display', serif;color:var(--marron-true)">Menú / Productos</h3>
+      <p style="margin-top:6px;color:var(--gris-oscuro)">Explora nuestras categorías. Usa los filtros para ver solo tartas, brownies, cheesecakes o cupcakes.</p>
+
+      <div style="margin-top:12px" class="filters" role="toolbar" aria-label="Filtros de productos">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="tarta">Tartas</button>
+        <button class="filter-btn" data-filter="brownie">Brownies</button>
+        <button class="filter-btn" data-filter="cheesecake">Cheesecakes</button>
+        <button class="filter-btn" data-filter="cupcake">Cupcakes</button>
+      </div>
+
+      <div class="menu-grid" id="products">
+
+        <!-- Producto 1 -->
+        <article class="product" data-category="tarta">
+          <img src="images/tartadevainilla.jpeg" alt="Tarta de fresa">
+          <h4>Tarta de fresa</h4>
+          <p>Torta con capas de crema y fresas frescas. Porción individual.</p>
+          <div class="price">	gs 15.000</div>
+        </article>
+
+        <!-- Producto 2 -->
+        <article class="product" data-category="brownie">
+          <img src="images/brownies.jpeg" alt="Brownie de chocolate">
+          <h4>Brownie de chocolate</h4>
+          <p>Brownie húmedo con trozos de chocolate.</p>
+          <div class="price">gs 20.000</div>
+        </article>
+
+        <!-- Producto 3 -->
+        <article class="product" data-category="cheesecake">
+          <img src="images/cheescake.jpeg" alt="Cheesecake de frutilla">
+          <h4>Cheesecake de Frutilla</h4>
+          <p>Clásico cheesecake con base de galleta.</p>
+          <div class="price">gs17.000</div>
+        </article>
+
+        <!-- Producto 4 -->
+        <article class="product" data-category="cupcake">
+          <img src="images/cupcakesdevainilla.jpeg" alt="Cupcake de vainilla">
+          <h4>Cupcake de vainilla</h4>
+          <p>Esponjoso, con buttercream.</p>
+          <div class="price">gs 14.000</div>
+        </article>
+
+        <!-- Producto 5 -->
+        <article class="product" data-category="brownie">
+          <img src="images/browniealmen.jpeg" alt="Brownie con nueces">
+          <h4>Brownie con nueces</h4>
+          <p>Brownie clásico con nueces troceadas.</p>
+          <div class="price">gs 25.000</div>
+        </article>
+
+        <!-- Producto 6 -->
+        <article class="product" data-category="tarta">
+          <img src="images/rebanadadechocolate.jpeg" alt="rebanadadechocolate.jpeg">
+          <h4>Tarta de chocolate</h4>
+          <p>Tarta rica y cremosa para los amantes del chocolate.</p>
+          <div class="price">gs 160.000</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- PROMOCIONES -->
+    <section id="promociones" class="card" aria-labelledby="titulo-promos">
+      <h3 id="titulo-promos" style="font-family:'Playfair Display', serif;color:var(--marron-true)">Promociones</h3>
+      <p style="margin-top:6px;color:var(--gris-oscuro)">Descuentos y combos especiales que puedes aprovechar esta semana.</p>
+
+      <div class="promos" style="margin-top:12px">
+        <div class="promo">
+          <h4>Combo tarde</h4>
+          <p>Lleva 2 cupcakes + café pequeño por gs 20.000. Oferta válida de 15:00 a 18:00.</p>
+        </div>
+        <div class="promo">
+          <h4>Miércoles Brownie</h4>
+          <p>Brownie de la casa 2x1 todos los miércoles.</p>
+        </div>
+        <div class="promo">
+          <h4>Descuento por encargo</h4>
+          <p>10% de descuento en pedidos de tartas para eventos (reservar con 72h).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="card" aria-labelledby="titulo-contacto">
+      <h3 id="titulo-contacto" style="font-family:'Playfair Display', serif;color:var(--marron-true)">Contacto</h3>
+      <div class="contact-grid" style="margin-top:12px">
+
+        <div>
+          <form id="contactForm" class="card" aria-label="Formulario de contacto">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required>
+
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" required>
+
+            <label for="mensaje">Mensaje / Pedido</label>
+            <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe aquí tu consulta o pedido" required></textarea>
+
+            <button type="submit" class="btn-send">Enviar mensaje</button>
+            <div id="formResult" aria-live="polite" style="margin-top:10px;font-size:14px"></div>
+          </form>
+        </div>
+
+        <aside>
+          <div class="card contact-info">
+            <div><strong>Dirección:</strong> Calle Dulce 789, Ciudad Dulcelandia</div>
+            <div><strong>Teléfono:</strong> <a href="tel:+595984008050" style="color:var(--rosa-fuerte);text-decoration:none">+595984-008-050</a></div>
+            <div><strong>Horario:</strong> Lun-Dom 9:00 - 20:00</div>
+
+            <div style="margin-top:8px">
+              <strong>Encuéntranos</strong>
+              <div class="map" style="margin-top:8px">
+                <!-- Reemplaza el src por el embed de tu ubicación en Google Maps -->
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019032906101!2d-122.42067938468117!3d37.77928067975709!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c0f0f0f0f%3A0x0!2sSomePlace!5e0!3m2!1ses!2sus!4v1610000000000!5m2!1ses!2sus"
+                  style="width:100%;height:180px;border:0;" allowfullscreen="" loading="lazy"></iframe>
+              </div>
+            </div>
+
+            <div style="margin-top:8px">
+              <strong>Pide por WhatsApp</strong>
+              <div><a href="https://wa.link/fpldzd" target="_blank" rel="noopener" style="color:var(--rosa-fuerte);text-decoration:none">Enviar mensaje por WhatsApp</a></div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER / REDES SOCIALES -->
+  <footer>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="display:flex;flex-direction:column">
+        <strong style="color:var(--marron-true)">El Rinconcito de los Postres</strong>
+        <small style="color:var(--gris-oscuro);font-size:13px">Un dulce momento en cada bocado</small>
+      </div>
+    </div>
+
+    <div class="socials" aria-label="Redes sociales">
+      <a href="https://instagram.com/" target="_blank" rel="noopener">
+        <!-- Instagram icon -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.2"></rect><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.2"></circle><circle cx="17.5" cy="6.5" r="0.7" fill="currentColor"></circle></svg>
+        Instagram
+      </a>
+      <a href="https://facebook.com/" target="_blank" rel="noopener">
+        <!-- Facebook icon -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 8h2v-3h-2a3 3 0 0 0-3 3v2H10v3h2v7h3v-7h2.5l.5-3H15V8z" fill="currentColor"></path></svg>
+        Facebook
+      </a>
+      <a href="https://wa.me/529123456789" target="_blank" rel="noopener">
+        <!-- WhatsApp icon -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12a9 9 0 1 0-2.6 6.01L21 21l-1.99-3.8A8.96 8.96 0 0 0 21 12z" stroke="currentColor" stroke-width="1.2"></path></svg>
+        WhatsApp
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!expanded));
+      mobileMenu.style.display = expanded ? 'none' : 'block';
+    });
+
+    // Filtros de productos
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const products = document.querySelectorAll('.product');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        products.forEach(p => {
+          if(f === 'all' || p.dataset.category === f){
+            p.style.display = '';
+          } else {
+            p.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Formulario de contacto - simulación sencilla
+    const form = document.getElementById('contactForm');
+    const result = document.getElementById('formResult');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Validación mínima
+      const nombre = form.nombre.value.trim();
+      const email = form.email.value.trim();
+      const mensaje = form.mensaje.value.trim();
+      if(!nombre || !email || !mensaje){
+        result.textContent = 'Por favor, completa todos los campos.';
+        result.style.color = 'crimson';
+        return;
+      }
+      // Simula envío
+      result.textContent = 'Gracias, tu mensaje ha sido enviado. Te contactaremos pronto.';
+      result.style.color = 'green';
+      form.reset();
+    });
+
+    // Accessibility: focus visible for keyboard users
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'Tab') document.body.classList.add('using-keyboard');
+    });
+
+  </script>
+
+</body>
+</html>
